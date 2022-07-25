@@ -1,5 +1,7 @@
 package main.java.movie;
 
+import main.java.ForgettingMap;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Objects;
@@ -9,7 +11,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static java.lang.Integer.parseInt;
 
-public class MovieService {
+public class MovieService extends ForgettingMap {
 
     // read in file and create associations map
     public static ConcurrentHashMap<String, Movie> BuildAssociations(String filePath) {
@@ -22,9 +24,13 @@ public class MovieService {
             String line;
 
             while ((line = bufferedReader.get().readLine()) != null) {
-                if (line.startsWith("title")) {
-                    Movie movie = BuildMovieObject(line, bufferedReader.get());
-                    FeaturedMoviesList.put(Objects.requireNonNull(movie).getTitle(), movie);
+                if (FeaturedMoviesList.size() < mapSize) {
+                    if (line.startsWith("title")) {
+                        Movie movie = BuildMovieObject(line, bufferedReader.get());
+                        FeaturedMoviesList.put(Objects.requireNonNull(movie).getTitle(), movie);
+                    }
+                } else {
+                    break;
                 }
             }
 

@@ -10,10 +10,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Integer.parseInt;
 
-public class Add extends MovieService {
+public class AddAssociation extends MovieService {
 
     // method for user input
-    public static ConcurrentHashMap<String, Movie> AddAssociation(ConcurrentHashMap<String, Movie> FeaturedMoviesList) {
+    public static ConcurrentHashMap<String, Movie> Add(ConcurrentHashMap<String, Movie> FeaturedMoviesList) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Add the name of the film: ");
@@ -63,35 +63,42 @@ public class Add extends MovieService {
             }
         }
 
+
         return ManageAssociations(FeaturedMoviesList, CreateMovie(title, director, year, rating, new AtomicInteger(0)));
+
     }
 
     // determine which association to remove from the map
     public static ConcurrentHashMap<String, Movie> ManageAssociations(ConcurrentHashMap<String, Movie> FeaturedMoviesList, Movie movie) {
-        Iterator<ConcurrentHashMap.Entry<String, Movie>> iterator = FeaturedMoviesList.entrySet().iterator();
+        if (FeaturedMoviesList.size() >= mapSize) {
+            Iterator<ConcurrentHashMap.Entry<String, Movie>> iterator = FeaturedMoviesList.entrySet().iterator();
 
-        Movie leastSearched = ReturnMovieEntry(iterator.next());
+            Movie leastSearched = ReturnMovieEntry(iterator.next());
 
-        while (iterator.hasNext()) {
-            Movie compare = ReturnMovieEntry(iterator.next());
+            while (iterator.hasNext()) {
+                Movie compare = ReturnMovieEntry(iterator.next());
 
-            // delete entry with the lowest amount of searches
-            if (parseInt(String.valueOf(leastSearched.getSearchCount())) > parseInt(String.valueOf(movie.getSearchCount()))) {
-                leastSearched = compare;
-            } // if entry search numbers are the same, delete entry with the lowest rating
-            else if (parseInt(String.valueOf(leastSearched.getSearchCount())) == parseInt(String.valueOf(movie.getSearchCount()))) {
-                if (parseInt(String.valueOf(leastSearched.getRating())) > parseInt(String.valueOf(compare.getRating()))) {
+                // delete entry with the lowest amount of searches
+                if (parseInt(String.valueOf(leastSearched.getSearchCount())) > parseInt(String.valueOf(movie.getSearchCount()))) {
                     leastSearched = compare;
+                } // if entry search numbers are the same, delete entry with the lowest rating
+                else if (parseInt(String.valueOf(leastSearched.getSearchCount())) == parseInt(String.valueOf(movie.getSearchCount()))) {
+                    if (parseInt(String.valueOf(leastSearched.getRating())) > parseInt(String.valueOf(compare.getRating()))) {
+                        leastSearched = compare;
+                    }
                 }
+                // if ratings and search numbers are the same, delete current entry
             }
-            // if ratings and search numbers are the same, delete current entry
+
+            // delete entry and add new movie
+            FeaturedMoviesList.remove(leastSearched.getTitle());
+            FeaturedMoviesList.put(movie.getTitle(), movie);
+
+            return FeaturedMoviesList;
+        } else {
+            FeaturedMoviesList.put(movie.getTitle(), movie);
+            return FeaturedMoviesList;
         }
-
-        // delete entry and add new movie
-        FeaturedMoviesList.remove(leastSearched.getTitle());
-        FeaturedMoviesList.put(movie.getTitle(), movie);
-
-        return FeaturedMoviesList;
     }
 
     // return movie object from iterator

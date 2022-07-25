@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class Find extends Add {
+public class FindAssociation extends AddAssociation {
 
     // loop through and print all associations
     public static void PrintAll(ConcurrentHashMap<String, Movie> FeaturedMoviesList) {
@@ -17,7 +17,7 @@ public class Find extends Add {
     }
 
     // find association print movie and increment search counter
-    public static void FindMovie(ConcurrentHashMap<String, Movie> FeaturedMoviesList) {
+    public static void Find(ConcurrentHashMap<String, Movie> FeaturedMoviesList) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter movie title:");
