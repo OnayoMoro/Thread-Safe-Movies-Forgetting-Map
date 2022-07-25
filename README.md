@@ -4,7 +4,7 @@ The forgetting map is a featured movies list that holds associations between a m
 search is recorded. However, as there can only be `(x)` associations (featured movies) at a time, when a new movie is added, the least searched 
 for, or lowest rated, is removed from the forgetting map, removing its association. 
 
-P.S. Depending on list size, 6 movies may be automatically be read in from a file located in `"\src\main\java\movie\moviesList.txt"`
+P.S. Depending on list size, 6 movies may be automatically be read in from a file located in `"\src\main\java\movie\moviesList.txt"` on program startup.
 
 ## How To use 
 This project was developed in Intellij. The console application has 4 commands, `add, find, print, exit` and each command is case-sensitive. This is also the case when looking up
