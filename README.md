@@ -5,7 +5,7 @@ search is recorded. However, as there can only be `(x)` associations (featured m
 for, or lowest rated, is removed from the forgetting map, removing its association. 
 
 ## How To use 
-This project was developed in Intelij. The console application has 4 commands, `add, find, print, exit` and each command is case-sensitive. This is also the case when looking up
+This project was developed in Intellij. The console application has 4 commands, `add, find, print, exit` and each command is case-sensitive. This is also the case when looking up
 movie titles using the `find` command.
 
 ### Add
