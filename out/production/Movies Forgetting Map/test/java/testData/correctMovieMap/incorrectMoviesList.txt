@@ -1,0 +1,35 @@
+Title: Blade Runner 2049
+director: Denis Villeneuve
+year: 2017
+rating: 88
+search count: 0
+
+Title: Tron
+director: Steven Lisberger
+year: 1982
+rating: 72
+search count: 0
+
+Title: Napoleon Dynamite
+director: Jared Hess
+year: 2004
+rating: 72
+search count: 0
+
+Title: Superbad
+director: Greg Mottola
+year: 2007
+rating: 87
+search count: 0
+
+Title: Lost in Translation
+director: Sofia Coppola
+year: 2003
+rating: 95
+search count: 0
+
+Title: Her
+director: Spike Jonze
+year: 2013
+rating: 94
+search count: 0

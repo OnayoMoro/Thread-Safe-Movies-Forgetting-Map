@@ -2,20 +2,22 @@ package main.java.association;
 
 import main.java.movie.Movie;
 
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class Find extends Add{
-    public static void PrintAll (Map<String, Movie> FeaturedMoviesList) {
+public class Find extends Add {
+
+    // loop through and print all associations
+    public static void PrintAll(ConcurrentHashMap<String, Movie> FeaturedMoviesList) {
         for (Object o : FeaturedMoviesList.entrySet()) {
-            Movie movie = ReturnMovieEntry((Map.Entry) o);
+            Movie movie = ReturnMovieEntry((ConcurrentHashMap.Entry) o);
             Print(movie);
         }
     }
 
-    public static void FindMovie (Map<String, Movie> FeaturedMoviesList) {
+    // find association print movie and increment search counter
+    public static void FindMovie(ConcurrentHashMap<String, Movie> FeaturedMoviesList) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter movie title:");
@@ -29,17 +31,17 @@ public class Find extends Add{
             movie.get().incrementSearchCount();
             FeaturedMoviesList.put(movie.get().getTitle(), movie.get());
             Print(movie.get());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Movie enrty does not exist");
         }
     }
 
+    // print movie to console
     public static void Print(Movie movie) {
         System.out.println("Title: " + movie.getTitle());
         System.out.println("Director: " + movie.getDirector());
         System.out.println("Year: " + movie.getYear());
-        System.out.println("Rating: " + movie.getRating());
+        System.out.println("Rating: " + movie.getRating() + "%");
         System.out.println("Search Count: " + movie.getSearchCount() + "\n");
     }
 }

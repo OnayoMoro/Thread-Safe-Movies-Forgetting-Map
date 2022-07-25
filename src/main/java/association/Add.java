@@ -4,14 +4,16 @@ import main.java.movie.Movie;
 import main.java.movie.MovieService;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Integer.parseInt;
 
 public class Add extends MovieService {
-    public static Map<String, Movie> AddAssociation(Map<String, Movie> FeaturedMoviesList) {
+
+    // method for user input
+    public static ConcurrentHashMap<String, Movie> AddAssociation(ConcurrentHashMap<String, Movie> FeaturedMoviesList) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Add the name of the film: ");
@@ -36,13 +38,10 @@ public class Add extends MovieService {
                     } else {
                         ValidYearErrorMsg();
                     }
-                }
-                else{
+                } else {
                     ValidYearErrorMsg();
                 }
-            }
-
-            catch (Exception e) {
+            } catch (Exception e) {
                 ValidYearErrorMsg();
             }
         }
@@ -56,31 +55,30 @@ public class Add extends MovieService {
                 if (parseInt(ratingString) <= 100 && parseInt(ratingString) >= 0) {
                     rating = new AtomicInteger(parseInt(ratingString));
                     break;
+                } else {
+                    ValidRatingErrorMsg();
                 }
-                else {
-                    System.out.println("Please enter valid rating");
-                }
-            }
-            catch (Exception e) {
-                System.out.println("Please enter valid rating");
+            } catch (Exception e) {
+                ValidRatingErrorMsg();
             }
         }
 
         return ManageAssociations(FeaturedMoviesList, CreateMovie(title, director, year, rating, new AtomicInteger(0)));
     }
 
-    public static Map<String, Movie> ManageAssociations(Map<String, Movie> FeaturedMoviesList, Movie movie) {
-        Iterator iterator = FeaturedMoviesList.entrySet().iterator();
+    // determine which association to remove from the map
+    public static ConcurrentHashMap<String, Movie> ManageAssociations(ConcurrentHashMap<String, Movie> FeaturedMoviesList, Movie movie) {
+        Iterator<ConcurrentHashMap.Entry<String, Movie>> iterator = FeaturedMoviesList.entrySet().iterator();
 
-        Movie leastSearched = ReturnMovieEntry((Map.Entry) iterator.next());
+        Movie leastSearched = ReturnMovieEntry(iterator.next());
 
         while (iterator.hasNext()) {
-            Movie compare = ReturnMovieEntry((Map.Entry) iterator.next());
+            Movie compare = ReturnMovieEntry(iterator.next());
 
-            // delete entry with lowest amount of searches
+            // delete entry with the lowest amount of searches
             if (parseInt(String.valueOf(leastSearched.getSearchCount())) > parseInt(String.valueOf(movie.getSearchCount()))) {
                 leastSearched = compare;
-            } // if entry search numbers are the same, delete entry with lowest rating
+            } // if entry search numbers are the same, delete entry with the lowest rating
             else if (parseInt(String.valueOf(leastSearched.getSearchCount())) == parseInt(String.valueOf(movie.getSearchCount()))) {
                 if (parseInt(String.valueOf(leastSearched.getRating())) > parseInt(String.valueOf(compare.getRating()))) {
                     leastSearched = compare;
@@ -96,12 +94,17 @@ public class Add extends MovieService {
         return FeaturedMoviesList;
     }
 
-    public static Movie ReturnMovieEntry(Map.Entry iterator) {
-        Movie entry = (Movie) iterator.getValue();
-        return entry;
+    // return movie object from iterator
+    public static Movie ReturnMovieEntry(ConcurrentHashMap.Entry iterator) {
+        return (Movie) iterator.getValue();
     }
 
+    // valid year error message
     public static void ValidYearErrorMsg() {
         System.out.println("Please enter valid year");
+    }
+
+    public static void ValidRatingErrorMsg() {
+        System.out.println("Please enter valid rating");
     }
 }

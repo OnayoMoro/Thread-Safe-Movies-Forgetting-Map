@@ -2,39 +2,41 @@ package main.java.movie;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static java.lang.Integer.parseInt;
 
 public class MovieService {
 
-    public static Map<String, Movie> BuildAssociations(String filePath) {
-        Map<String, Movie> FeaturedMoviesList = new HashMap<>(); // holds associations
+    // read in file and create associations map
+    public static ConcurrentHashMap<String, Movie> BuildAssociations(String filePath) {
+        ConcurrentHashMap<String, Movie> FeaturedMoviesList = new ConcurrentHashMap<>(); // holds associations
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+            AtomicReference<BufferedReader> bufferedReader = new AtomicReference();
+            bufferedReader.set(new BufferedReader(new FileReader(filePath)));
 
             String line;
 
-            while ((line = bufferedReader.readLine()) != null) {
+            while ((line = bufferedReader.get().readLine()) != null) {
                 if (line.startsWith("title")) {
-                    Movie movie = BuildMovieObject(line, bufferedReader);
-                    FeaturedMoviesList.putIfAbsent(Objects.requireNonNull(movie).getTitle(), movie);
+                    Movie movie = BuildMovieObject(line, bufferedReader.get());
+                    FeaturedMoviesList.put(Objects.requireNonNull(movie).getTitle(), movie);
                 }
             }
 
-            bufferedReader.close();
-        }
-        catch (Exception e) {
+            bufferedReader.get().close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return FeaturedMoviesList;
     }
 
+    // build movie object
     public static Movie BuildMovieObject(String line, BufferedReader bufferedReader) {
 
         try {
@@ -49,14 +51,14 @@ public class MovieService {
             searchCount.set(parseInt(bufferedReader.readLine().substring(14)));
 
             return CreateMovie(title, director, year, rating, searchCount);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
     }
 
+    // create and return movie object
     public static Movie CreateMovie(String title, String director, AtomicInteger year,
                                     AtomicInteger rating, AtomicInteger searchCount) {
         return new Movie(title, director, year, rating, searchCount);

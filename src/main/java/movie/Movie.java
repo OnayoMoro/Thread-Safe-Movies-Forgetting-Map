@@ -9,8 +9,9 @@ public class Movie {
     private final AtomicInteger rating;
     private final AtomicInteger searchCount;
 
+    // movie object
     public Movie(String title, String director,
-            AtomicInteger year, AtomicInteger rating, AtomicInteger searchCount) {
+                 AtomicInteger year, AtomicInteger rating, AtomicInteger searchCount) {
         this.title = title;
         this.director = director;
         this.year = year;
